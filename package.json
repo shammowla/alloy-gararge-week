@@ -23,8 +23,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "format": "prettier --write .",
-    "prepare": "husky install"
+    "format": "prettier --write --ignore-unknown",
+    "prepare": "husky install",
+    "server:start": "node server.mjs",
+    "server:dev": "nodemon server.mjs"
   },
   "eslintConfig": {
     "extends": [
@@ -47,6 +49,7 @@
   "devDependencies": {
     "husky": "^8.0.2",
     "lint-staged": "^13.1.0",
+    "nodemon": "^2.0.20",
     "prettier": "2.8.0"
   },
   "lint-staged": {

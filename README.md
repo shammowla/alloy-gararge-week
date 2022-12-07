@@ -1,3 +1,18 @@
+# Alloy Garage Week: Web SDK Web Configurator
+
+1. Clone the project
+   - `git clone git@github.com:shammowla/alloy-gararge-week.git`
+2. Clone the Alloy submodule
+   - `git submodule init`
+   - `git submodule update`
+3. Install dependencies for this and Alloy
+   - `npm ci`
+   - `cd alloy`
+   - `npm ci`
+4. Build the front-end
+   - (back in the repo root directory) `npm build`
+5. Start the server
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
