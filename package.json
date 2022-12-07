@@ -21,6 +21,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "dev": "nodemon server.mjs",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -53,6 +54,7 @@
     "@types/express": "^4.17.14",
     "husky": "^8.0.2",
     "lint-staged": "^13.1.0",
+    "nodemon": "^2.0.20",
     "prettier": "2.8.0",
     "tsx": "^3.12.1"
   },
