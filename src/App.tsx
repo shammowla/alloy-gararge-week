@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Form, Formik, Field } from "formik";
-import AlloyBuildConfig from "../shared/AlloyBuildConfig";
+import { AlloyBuildConfig } from "../sharedTypes/";
 
 function App() {
   const initialValues: AlloyBuildConfig = {
