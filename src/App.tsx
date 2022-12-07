@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { Form, Formik, Field } from "formik";
-import { AlloyBuildConfig } from "../sharedTypes/";
+import { AlloyBuildConfig, BundlerResult } from "../sharedTypes/";
+import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter";
+import js from "react-syntax-highlighter/dist/esm/languages/prism/javascript";
+import atomDark from "react-syntax-highlighter/dist/esm/styles/prism/atom-dark";
+
+SyntaxHighlighter.registerLanguage("javascript", js);
 
 function App() {
   const initialValues: AlloyBuildConfig = {
@@ -8,7 +13,7 @@ function App() {
     edgeConfigId: "",
     includedComponents: [],
   };
-  const [serverResponse, setServerResponse] = useState("{}");
+  const [serverResponse, setServerResponse] = useState<BundlerResult | null>();
   const onSubmit = async (values: AlloyBuildConfig, { setSubmitting }: any) => {
     const response = await fetch("/build", {
       method: "POST",
@@ -16,10 +21,40 @@ function App() {
     });
 
     setSubmitting(false);
-    // format the server response
-    const result = await response.json();
-    setServerResponse(JSON.stringify(result, null, 2));
+    const result = (await response.json()) as BundlerResult;
+    setServerResponse(result);
   };
+
+  let ServerResponse;
+  if (serverResponse != null) {
+    if (!serverResponse.success) {
+      ServerResponse = (
+        <>
+          <p>Failed to Alloy. Took {serverResponse.elapsedTime}ms.</p>
+          <p>{serverResponse.message}</p>
+        </>
+      );
+    } else {
+      ServerResponse = (
+        <>
+          <p>Succeeded building Alloy. Took {serverResponse.elapsedTime}ms.</p>
+          {serverResponse.chunks.map((c) => (
+            <>
+              <h3>{c.name}</h3>
+              <SyntaxHighlighter
+                language="javascript"
+                showLineNumbers={true}
+                style={atomDark}
+                customStyle={{ maxWidth: "90ch", maxHeight: "600px" }}
+              >
+                {c.code}
+              </SyntaxHighlighter>
+            </>
+          ))}
+        </>
+      );
+    }
+  }
 
   return (
     <div>
@@ -162,14 +197,12 @@ function App() {
             )}
           </Formik>
         </section>
-        <section>
-          <h2>Result</h2>
-          <div>
-            <pre>
-              <code>{serverResponse}</code>
-            </pre>
-          </div>
-        </section>
+        {serverResponse != null && (
+          <section>
+            <h2>Result</h2>
+            {ServerResponse}
+          </section>
+        )}
       </main>
     </div>
   );
