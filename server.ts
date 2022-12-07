@@ -70,6 +70,10 @@ async function generateOutputs(
 ): Promise<BundlerChunk[]> {
   const rollupOutputOptions: OutputOptions = {
     plugins: [],
+    format: "es",
+    compact: true,
+    generatedCode: "es2015",
+    preserveModules: true,
   };
   if (configuration.minify) {
     // Disabled until https://github.com/rollup/plugins/pull/1367 is in main
