@@ -2,6 +2,7 @@
   "name": "alloy-garage-week",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -25,8 +26,8 @@
     "eject": "react-scripts eject",
     "format": "prettier --write --ignore-unknown",
     "prepare": "husky install",
-    "server:start": "node server.mjs",
-    "server:dev": "nodemon server.mjs"
+    "server:start": "tsx server.ts",
+    "server:dev": "tsx watch --ignore ./src server.ts"
   },
   "eslintConfig": {
     "extends": [
@@ -47,10 +48,12 @@
     ]
   },
   "devDependencies": {
+    "@tsconfig/create-react-app": "^1.0.3",
+    "@tsconfig/node18-strictest-esm": "^1.0.1",
     "husky": "^8.0.2",
     "lint-staged": "^13.1.0",
-    "nodemon": "^2.0.20",
-    "prettier": "2.8.0"
+    "prettier": "2.8.0",
+    "tsx": "^3.12.1"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"

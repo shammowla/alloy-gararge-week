@@ -4,7 +4,7 @@ const port = 3001;
 app.use(express.static("build"));
 app.use(express.json());
 
-async function makeCustomBuild(configuration) {}
+async function makeCustomBuild(configuration: any) {}
 
 app.get("/", (req, res) => {
   res.redirect("/index.html");
