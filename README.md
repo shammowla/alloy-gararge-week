@@ -2,16 +2,14 @@
 
 1. Clone the project
    - `git clone git@github.com:shammowla/alloy-gararge-week.git`
-2. Clone the Alloy submodule
-   - `git submodule init`
-   - `git submodule update`
-3. Install dependencies for this and Alloy
+2. Install dependencies for this
    - `npm ci`
-   - `cd alloy`
-   - `npm ci`
-4. Build the front-end
-   - (back in the repo root directory) `npm build`
-5. Start the server
+3. Build the front-end
+   - `npm build`
+4. Start the server
+   - `npm run server:start`
+   - or, for an auto-reloading when server.ts changes, `npm run server:dev`
+5. Open the Web UI on `localhost:3001`
 
 # Getting Started with Create React App
 
