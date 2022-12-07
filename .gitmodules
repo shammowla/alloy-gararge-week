@@ -1,0 +1,3 @@
+[submodule "alloy"]
+	path = alloy
+	url = git@github.com:adobe/alloy.git
