@@ -1,19 +1,14 @@
 import React from "react";
 import { Form, Formik, Field } from "formik";
-
-interface FormState {
-  orgId: string;
-  edgeConfigId: string;
-  includedComponents: [];
-}
+import AlloyBuildConfig from "../shared/AlloyBuildConfig";
 
 function App() {
-  const initialValues: FormState = {
+  const initialValues: AlloyBuildConfig = {
     orgId: "",
     edgeConfigId: "",
     includedComponents: [],
   };
-  const onSubmit = async (values: FormState, { setSubmitting }: any) => {
+  const onSubmit = async (values: AlloyBuildConfig, { setSubmitting }: any) => {
     const response = await fetch("/build", {
       method: "POST",
       body: values as any,
