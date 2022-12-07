@@ -12,12 +12,16 @@ function App() {
     orgId: "",
     edgeConfigId: "",
     includedComponents: [],
+    minify: false,
   };
   const [serverResponse, setServerResponse] = useState<BundlerResult | null>();
   const onSubmit = async (values: AlloyBuildConfig, { setSubmitting }: any) => {
     const response = await fetch("/build", {
       method: "POST",
-      body: values as any,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
     });
 
     setSubmitting(false);
@@ -188,6 +192,10 @@ function App() {
                     </label>
                   </li>
                 </ul>
+                <div>
+                  <label htmlFor="minify">Minify?</label>
+                  <Field type="checkbox" name="minify" id="minify"></Field>
+                </div>
                 <div>
                   <button type="submit" disabled={isSubmitting}>
                     Build

@@ -1,6 +1,7 @@
 /// <reference types="express">
 import commonjs from "@rollup/plugin-commonjs";
 import nodeResolve from "@rollup/plugin-node-resolve";
+import terser from "@rollup/plugin-terser";
 import express, { Request, Response } from "express";
 import {
   rollup,
@@ -25,28 +26,26 @@ const logInfo = (message: string, ...args: any[]) => {
   return [...args];
 };
 
-const rollupInputOptions: InputOptions = {
-  input: "./alloy/src/index.js",
-  plugins: [
-    nodeResolve({
-      preferBuiltins: false,
-      // Support the browser field in dependencies' package.json.
-      // Useful for the uuid package.
-      mainFields: ["module", "main", "browser"],
-    }),
-    commonjs(),
-  ],
-};
-const rollupOutputOptions: OutputOptions = {};
-
 async function makeCustomBuild(
   configuration: AlloyBuildConfig
 ): Promise<BundlerResult> {
   let bundle: RollupBuild | null = null;
   const start = performance.now();
+  const rollupInputOptions: InputOptions = {
+    input: "./alloy/src/index.js",
+    plugins: [
+      nodeResolve({
+        preferBuiltins: false,
+        // Support the browser field in dependencies' package.json.
+        // Useful for the uuid package.
+        mainFields: ["module", "main", "browser"],
+      }),
+      commonjs(),
+    ],
+  };
   try {
     bundle = await rollup(rollupInputOptions);
-    const chunks = await generateOutputs(bundle);
+    const chunks = await generateOutputs(configuration, bundle);
     return {
       success: true,
       elapsedTime: performance.now() - start,
@@ -65,22 +64,31 @@ async function makeCustomBuild(
   }
 }
 
-async function generateOutputs(bundle: RollupBuild): Promise<BundlerChunk[]> {
+async function generateOutputs(
+  configuration: AlloyBuildConfig,
+  bundle: RollupBuild
+): Promise<BundlerChunk[]> {
+  const rollupOutputOptions: OutputOptions = {
+    plugins: [],
+  };
+  if (configuration.minify) {
+    // Disabled until https://github.com/rollup/plugins/pull/1367 is in main
+    // rollupOutputOptions.plugins = [...(rollupOutputOptions.plugins ?? []), terser()]
+  }
+  const start = performance.now();
   const { output } = await bundle.generate(rollupOutputOptions);
-  const chunkCount = output.filter(
-    (c): c is OutputChunk => c.type === "chunk"
-  ).length;
-  logInfo(
-    `Generated outputs: ${output.length} results (${chunkCount} chunks, ${
-      output.length - chunkCount
-    } assets)`
-  );
-  return output
+  const chunks = output
     .filter((c): c is OutputChunk => c.type === "chunk")
     .map((c) => ({
       name: `${c.name}`,
       code: `${c.code}`,
     }));
+  logInfo(
+    `Generated outputs: ${output.length} results (${chunks.length} chunks, ${
+      output.length - chunks.length
+    } assets) in ${performance.now() - start}ms.`
+  );
+  return chunks;
 }
 
 app.get("/", (req: Request, res: Response) => {
@@ -88,7 +96,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.post("/build", async (req: Request, res: Response) => {
-  const configuration = req.body as AlloyBuildConfig;
+  const configuration = req.body;
   const result = await makeCustomBuild(configuration);
   res.send(result);
 });
