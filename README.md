@@ -2,10 +2,11 @@
 
 1. Clone the project
    - `git clone git@github.com:shammowla/alloy-gararge-week.git`
-2. Install dependencies for this
+2. Install dependencies for this an Alloy
    - `npm ci`
+   - `cd alloy/ && npm ci`
 3. Build the front-end
-   - `npm build`
+   - (back in the repo root) `npm build`
 4. Start the server
    - `npm run server:start`
    - or, for an auto-reloading when server.ts changes, `npm run server:dev`
