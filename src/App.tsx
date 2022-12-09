@@ -13,30 +13,37 @@ import JSZip from "jszip";
 import FileSaver from "file-saver";
 
 SyntaxHighlighter.registerLanguage("javascript", js);
+const JS_ENTRY_POINT_FILENAME = "index.js";
 
 async function downloadBundlerResults(
   results: BundlerSuccessResult
 ): Promise<void> {
   const zip = new JSZip();
-  for (const chunk of results.chunks) {
-    zip.file(chunk.name, chunk.code);
-  }
+  results.chunks.forEach((chunk, index) => {
+    const filePath =
+      index === 0 && chunk.name === JS_ENTRY_POINT_FILENAME
+        ? chunk.name
+        : "alloy/" + chunk.name;
+    zip.file(filePath, chunk.code);
+  });
   const zipBlob = await zip.generateAsync({ type: "blob" });
-  FileSaver.saveAs(zipBlob, "differential-alloy-build.zip");
+  FileSaver.saveAs(zipBlob, "alloy-build.zip");
 }
 
 function writeAlloyConfigScript(configuration: AlloyBuildConfig): BundlerChunk {
-  const code = `import { createInstance } from "./src/index.js"
+  const code = `import { createInstance } from "./alloy/src/index.js"
 
-const alloy = createInstance({
+const alloy = createInstance();
+alloy.configure({
   orgId: "${configuration.orgId}",
   edgeConfigId: "${configuration.edgeConfigId}",
   components: ${JSON.stringify(configuration.includedComponents, null, 4)}
 });
+export default alloy;
 `;
 
   return {
-    name: "index.js",
+    name: JS_ENTRY_POINT_FILENAME,
     code,
   };
 }
