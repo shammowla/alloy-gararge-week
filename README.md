@@ -1,4 +1,6 @@
-# Alloy Garage Week: Web SDK Web Configurator
+# ⚒ The Alloy Forge
+
+For Adobe Garage Week 2022. Create custom ES Module builds of [Alloy](https://github.com/adobe/alloy).
 
 1. Clone the project
    - `git clone --recurse-submodules git@github.com:shammowla/alloy-gararge-week.git`

@@ -1,14 +1,32 @@
 import React, { useState } from "react";
 import { Form, Formik, Field } from "formik";
-import { AlloyBuildConfig, BundlerChunk, BundlerResult } from "../sharedTypes/";
+import {
+  AlloyBuildConfig,
+  BundlerChunk,
+  BundlerResult,
+  BundlerSuccessResult,
+} from "../sharedTypes/";
 import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter";
 import js from "react-syntax-highlighter/dist/esm/languages/prism/javascript";
 import atomDark from "react-syntax-highlighter/dist/esm/styles/prism/atom-dark";
+import JSZip from "jszip";
+import FileSaver from "file-saver";
 
 SyntaxHighlighter.registerLanguage("javascript", js);
 
+async function downloadBundlerResults(
+  results: BundlerSuccessResult
+): Promise<void> {
+  const zip = new JSZip();
+  for (const chunk of results.chunks) {
+    zip.file(chunk.name, chunk.code);
+  }
+  const zipBlob = await zip.generateAsync({ type: "blob" });
+  FileSaver.saveAs(zipBlob, "differential-alloy-build.zip");
+}
+
 function writeAlloyConfigScript(configuration: AlloyBuildConfig): BundlerChunk {
-  const code = `import { createInstance } from "./alloy/src/index.js"
+  const code = `import { createInstance } from "./src/index.js"
 
 const alloy = createInstance({
   orgId: "${configuration.orgId}",
@@ -18,10 +36,11 @@ const alloy = createInstance({
 `;
 
   return {
-    name: "On-page Alloy Javascript",
+    name: "index.js",
     code,
   };
 }
+
 function App() {
   const initialValues: AlloyBuildConfig = {
     orgId: "",
@@ -45,6 +64,14 @@ function App() {
       result.chunks = [writeAlloyConfigScript(values), ...result.chunks];
     }
     setServerResponse(result);
+  };
+
+  const onDownloadClicked = () => {
+    if (serverResponse?.success) {
+      downloadBundlerResults(serverResponse);
+    } else {
+      // do nothing, not a successfully generated bundle
+    }
   };
 
   let ServerResponse;
@@ -81,7 +108,10 @@ function App() {
   return (
     <div>
       <header>
-        <h1>Alloy Garage Week: Alloy Custom Builds</h1>
+        <h1>⚒ The Alloy Forge</h1>
+        <p>
+          For Adobe Garage Week 2022. Create custom ES Module builds of Alloy.
+        </p>
       </header>
       <main>
         <section>
@@ -216,7 +246,7 @@ function App() {
                 </div>
                 <div>
                   <button type="submit" disabled={isSubmitting}>
-                    Build
+                    ⚒ Build
                   </button>
                 </div>
               </Form>
@@ -224,10 +254,15 @@ function App() {
           </Formik>
         </section>
         {serverResponse != null && (
-          <section>
-            <h2>Result</h2>
-            {ServerResponse}
-          </section>
+          <>
+            <p>
+              <button onClick={onDownloadClicked}>💾 Download</button>
+            </p>
+            <section>
+              <h2>Result</h2>
+              {ServerResponse}
+            </section>
+          </>
         )}
       </main>
     </div>
