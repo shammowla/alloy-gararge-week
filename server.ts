@@ -84,7 +84,7 @@ async function generateOutputs(
   const chunks = output
     .filter((c): c is OutputChunk => c.type === "chunk")
     .map((c) => ({
-      name: `${c.name}`,
+      name: `${c.fileName}`,
       code: `${c.code}`,
     }));
   logInfo(
