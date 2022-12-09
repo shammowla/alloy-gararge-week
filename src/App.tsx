@@ -81,7 +81,10 @@ function App() {
   return (
     <div>
       <header>
-        <h1>Alloy Garage Week: Alloy Custom Builds</h1>
+        <h1>⚒ The Alloy Forge</h1>
+        <p>
+          For Adobe Garage Week 2022. Create custom ES Module builds of Alloy.
+        </p>
       </header>
       <main>
         <section>
