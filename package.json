@@ -31,7 +31,7 @@
     "eject": "react-scripts eject",
     "format": "prettier --write --ignore-unknown src/* server.ts shared/*",
     "prepare": "husky install",
-    "server:start": "tsx server.ts",
+    "server:start": "tsx ./server.ts",
     "server:dev": "tsx watch --ignore ./src server.ts"
   },
   "eslintConfig": {
