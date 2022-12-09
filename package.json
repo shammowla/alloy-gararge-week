@@ -25,13 +25,16 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "npm run dev",
+    "dev": "run-p ui:start server:dev",
+    "prod": "run-s ui:build server:start",
+    "ui:start": "react-scripts start",
+    "ui:build": "react-scripts build",
+    "ui:test": "react-scripts test",
     "eject": "react-scripts eject",
     "format": "prettier --write --ignore-unknown src/* server.ts shared/*",
     "prepare": "husky install",
-    "server:start": "tsx server.ts",
+    "server:start": "tsx ./server.ts",
     "server:dev": "tsx watch --ignore ./src server.ts"
   },
   "eslintConfig": {
@@ -59,10 +62,12 @@
     "@types/react-syntax-highlighter": "^15.5.5",
     "husky": "^8.0.2",
     "lint-staged": "^13.1.0",
+    "npm-run-all": "^4.1.5",
     "prettier": "2.8.0",
     "tsx": "^3.12.1"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
-  }
+  },
+  "proxy": "http://localhost:3000"
 }
