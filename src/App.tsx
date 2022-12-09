@@ -1,11 +1,7 @@
 import React, { useState } from "react";
-import { Form, Formik, Field } from "formik";
-import {
-  AlloyBuildConfig,
-  BundlerChunk,
-  BundlerResult,
-  BundlerSuccessResult,
-} from "../sharedTypes/";
+import { Form, Formik } from "formik";
+import { CheckboxGroup, TextField, Checkbox } from "@adobe/react-spectrum";
+import { AlloyBuildConfig, BundlerResult } from "../sharedTypes/";
 import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter";
 import js from "react-syntax-highlighter/dist/esm/languages/prism/javascript";
 import atomDark from "react-syntax-highlighter/dist/esm/styles/prism/atom-dark";
@@ -128,7 +124,7 @@ function App() {
               <Form>
                 <div>
                   <label htmlFor="orgId">Organization ID</label>
-                  <Field
+                  <TextField
                     type="text"
                     name="orgId"
                     id="orgId"
@@ -137,7 +133,7 @@ function App() {
                 </div>
                 <div>
                   <label htmlFor="edgeConfigId">Edge Configuration ID</label>
-                  <Field
+                  <TextField
                     type="text"
                     name="edgeConfigId"
                     id="edgeConfigId"
@@ -145,111 +141,27 @@ function App() {
                   />
                 </div>
                 <div id="checkbox-group">Included Components</div>
-                <ul role="group" aria-labelledby="checkbox-group">
-                  <li>
-                    <label>
-                      ActivityCollector
-                      <Field
-                        type="checkbox"
-                        name="includedComponents"
-                        value="ActivityCollector"
-                      ></Field>
-                    </label>
-                  </li>
-                  <li>
-                    <label>
-                      Audiences
-                      <Field
-                        type="checkbox"
-                        name="includedComponents"
-                        value="Audiences"
-                      ></Field>
-                    </label>
-                  </li>
-                  <li>
-                    <label>
-                      Context
-                      <Field
-                        type="checkbox"
-                        name="includedComponents"
-                        value="Context"
-                      ></Field>
-                    </label>
-                  </li>
-                  <li>
-                    <label>
-                      DataCollector
-                      <Field
-                        type="checkbox"
-                        name="includedComponents"
-                        value="DataCollector"
-                      ></Field>
-                    </label>
-                  </li>
-                  <li>
-                    <label>
-                      EventMerge
-                      <Field
-                        type="checkbox"
-                        name="includedComponents"
-                        value="EventMerge"
-                      ></Field>
-                    </label>
-                  </li>
-                  <li>
-                    <label>
-                      Identity
-                      <Field
-                        type="checkbox"
-                        name="includedComponents"
-                        value="Identity"
-                      ></Field>
-                    </label>
-                  </li>
-                  <li>
-                    <label>
-                      LibraryInfo
-                      <Field
-                        type="checkbox"
-                        name="includedComponents"
-                        value="LibraryInfo"
-                      ></Field>
-                    </label>
-                  </li>
-                  <li>
-                    <label>
-                      MachineLearning
-                      <Field
-                        type="checkbox"
-                        name="includedComponents"
-                        value="MachineLearning"
-                      ></Field>
-                    </label>
-                  </li>
-                  <li>
-                    <label>
-                      Personalization
-                      <Field
-                        type="checkbox"
-                        name="includedComponents"
-                        value="Personalization"
-                      ></Field>
-                    </label>
-                  </li>
-                  <li>
-                    <label>
-                      Privacy
-                      <Field
-                        type="checkbox"
-                        name="includedComponents"
-                        value="Privacy"
-                      ></Field>
-                    </label>
-                  </li>
-                </ul>
+                <CheckboxGroup label="Included Components">
+                  <Checkbox value="ActivityCollector">
+                    ActivityCollector
+                  </Checkbox>
+                  <Checkbox value="Audiences">Audiences</Checkbox>
+                  <Checkbox value="Context">Context</Checkbox>
+                  <Checkbox value="DataCollector">DataCollector</Checkbox>
+                  <Checkbox value="EventMerge">EventMerge</Checkbox>
+                  <Checkbox value="Identity">Identity</Checkbox>
+                  <Checkbox value="Context">LibraryInfo</Checkbox>
+                  <Checkbox value="DataCollector">MachineLearning</Checkbox>
+                  <Checkbox value="EventMerge">Personalization</Checkbox>
+                  <Checkbox value="Identity">Privacy</Checkbox>
+                </CheckboxGroup>
                 <div>
                   <label htmlFor="minify">Minify?</label>
-                  <Field type="checkbox" name="minify" id="minify"></Field>
+                  <TextField
+                    type="checkbox"
+                    name="minify"
+                    id="minify"
+                  ></TextField>
                 </div>
                 <div>
                   <button type="submit" disabled={isSubmitting}>
