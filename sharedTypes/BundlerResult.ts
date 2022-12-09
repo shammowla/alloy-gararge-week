@@ -1,13 +1,13 @@
 import { string } from "../alloy/src/utils/validation";
 import BundlerChunk from "./BundlerChunk";
 
-interface BundlerSuccessResult {
+export interface BundlerSuccessResult {
   success: true;
   elapsedTime: number;
   chunks: BundlerChunk[];
 }
 
-interface BundlerFailureResult {
+export interface BundlerFailureResult {
   success: false;
   elapsedTime: number;
   message: string;
