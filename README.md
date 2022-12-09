@@ -1,16 +1,13 @@
 # Alloy Garage Week: Web SDK Web Configurator
 
 1. Clone the project
-   - `git clone git@github.com:shammowla/alloy-gararge-week.git`
+   - `git clone --recurse-submodules git@github.com:shammowla/alloy-gararge-week.git`
 2. Install dependencies for this an Alloy
    - `npm ci`
    - `cd alloy/ && npm ci`
-3. Build the front-end
-   - (back in the repo root) `npm build`
-4. Start the server
-   - `npm run server:start`
-   - or, for an auto-reloading when server.ts changes, `npm run server:dev`
-5. Open the Web UI on `localhost:3001`
+3. Start the development build for the server and the front end
+   - `npm run start`
+4. Open the Web UI on `http://localhost:3000`
 
 # Getting Started with Create React App
 
