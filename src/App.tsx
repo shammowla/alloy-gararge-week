@@ -1,12 +1,27 @@
 import React, { useState } from "react";
 import { Form, Formik, Field } from "formik";
-import { AlloyBuildConfig, BundlerResult } from "../sharedTypes/";
+import { AlloyBuildConfig, BundlerChunk, BundlerResult } from "../sharedTypes/";
 import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter";
 import js from "react-syntax-highlighter/dist/esm/languages/prism/javascript";
 import atomDark from "react-syntax-highlighter/dist/esm/styles/prism/atom-dark";
 
 SyntaxHighlighter.registerLanguage("javascript", js);
 
+function writeAlloyConfigScript(configuration: AlloyBuildConfig): BundlerChunk {
+  const code = `import { createInstance } from "./alloy/src/index.js"
+
+const alloy = createInstance({
+  orgId: "${configuration.orgId}",
+  edgeConfigId: "${configuration.edgeConfigId}",
+  components: ${JSON.stringify(configuration.includedComponents, null, 4)}
+});
+`;
+
+  return {
+    name: "On-page Alloy Javascript",
+    code,
+  };
+}
 function App() {
   const initialValues: AlloyBuildConfig = {
     orgId: "",
@@ -26,6 +41,9 @@ function App() {
 
     setSubmitting(false);
     const result = (await response.json()) as BundlerResult;
+    if (result.success) {
+      result.chunks = [writeAlloyConfigScript(values), ...result.chunks];
+    }
     setServerResponse(result);
   };
 
