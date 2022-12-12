@@ -1,12 +1,25 @@
 import React, { useState } from "react";
-import { Form, Formik } from "formik";
-import { CheckboxGroup, TextField, Checkbox } from "@adobe/react-spectrum";
-import { AlloyBuildConfig, BundlerResult } from "../sharedTypes/";
+import { Form, Formik, Field } from "formik";
+import {
+  AlloyBuildConfig,
+  BundlerChunk,
+  BundlerResult,
+  BundlerSuccessResult,
+} from "../sharedTypes/";
 import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter";
 import js from "react-syntax-highlighter/dist/esm/languages/prism/javascript";
 import atomDark from "react-syntax-highlighter/dist/esm/styles/prism/atom-dark";
 import JSZip from "jszip";
 import FileSaver from "file-saver";
+import {
+  CheckboxGroup,
+  Flex,
+  Heading,
+  TextField,
+  Checkbox,
+  Text,
+} from "@adobe/react-spectrum";
+import { Step } from "./components/Step";
 
 SyntaxHighlighter.registerLanguage("javascript", js);
 const JS_ENTRY_POINT_FILENAME = "index.js";
@@ -110,80 +123,82 @@ function App() {
 
   return (
     <div>
-      <header>
-        <h1>⚒ The Alloy Forge</h1>
-        <p>
-          For Adobe Garage Week 2022. Create custom ES Module builds of Alloy.
-        </p>
-      </header>
-      <main>
-        <section>
-          <h2>Configure</h2>
-          <Formik initialValues={{ ...initialValues }} onSubmit={onSubmit}>
-            {({ isSubmitting }) => (
-              <Form>
-                <div>
-                  <label htmlFor="orgId">Organization ID</label>
-                  <TextField
-                    type="text"
-                    name="orgId"
-                    id="orgId"
-                    placeholder="ADB3LETTERSANDNUMBERS@AdobeOrg"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="edgeConfigId">Edge Configuration ID</label>
-                  <TextField
-                    type="text"
-                    name="edgeConfigId"
-                    id="edgeConfigId"
-                    placeholder="ebebf826-a01f-4458-8cec-ef61de241c93"
-                  />
-                </div>
-                <div id="checkbox-group">Included Components</div>
-                <CheckboxGroup label="Included Components">
-                  <Checkbox value="ActivityCollector">
-                    ActivityCollector
-                  </Checkbox>
-                  <Checkbox value="Audiences">Audiences</Checkbox>
-                  <Checkbox value="Context">Context</Checkbox>
-                  <Checkbox value="DataCollector">DataCollector</Checkbox>
-                  <Checkbox value="EventMerge">EventMerge</Checkbox>
-                  <Checkbox value="Identity">Identity</Checkbox>
-                  <Checkbox value="Context">LibraryInfo</Checkbox>
-                  <Checkbox value="DataCollector">MachineLearning</Checkbox>
-                  <Checkbox value="EventMerge">Personalization</Checkbox>
-                  <Checkbox value="Identity">Privacy</Checkbox>
-                </CheckboxGroup>
-                <div>
-                  <label htmlFor="minify">Minify?</label>
-                  <TextField
-                    type="checkbox"
-                    name="minify"
-                    id="minify"
-                  ></TextField>
-                </div>
-                <div>
-                  <button type="submit" disabled={isSubmitting}>
-                    ⚒ Build
-                  </button>
-                </div>
-              </Form>
-            )}
-          </Formik>
-        </section>
-        {serverResponse != null && (
-          <>
-            <p>
-              <button onClick={onDownloadClicked}>💾 Download</button>
-            </p>
-            <section>
-              <h2>Result</h2>
-              {ServerResponse}
-            </section>
-          </>
-        )}
-      </main>
+      <Flex direction="column" gap="size-200">
+        <Heading level={1}>⚒ The Alloy Forge</Heading>
+        <Flex alignItems="center" gap="size-200">
+          <Text>
+            For Adobe Garage Week 2022. Create custom ES Module builds of Alloy.
+          </Text>
+        </Flex>
+        <main>
+          <section>
+            <Step.StepHeader>Configure</Step.StepHeader>
+            <Formik initialValues={{ ...initialValues }} onSubmit={onSubmit}>
+              {({ isSubmitting }) => (
+                <Form>
+                  <div>
+                    <label htmlFor="orgId">Organization ID</label>
+                    <TextField
+                      type="text"
+                      name="orgId"
+                      id="orgId"
+                      placeholder="ADB3LETTERSANDNUMBERS@AdobeOrg"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="edgeConfigId">Edge Configuration ID</label>
+                    <TextField
+                      type="text"
+                      name="edgeConfigId"
+                      id="edgeConfigId"
+                      placeholder="ebebf826-a01f-4458-8cec-ef61de241c93"
+                    />
+                  </div>
+                  <div id="checkbox-group">Included Components</div>
+                  <CheckboxGroup label="Included Components">
+                    <Checkbox value="ActivityCollector">
+                      ActivityCollector
+                    </Checkbox>
+                    <Checkbox value="Audiences">Audiences</Checkbox>
+                    <Checkbox value="Context">Context</Checkbox>
+                    <Checkbox value="DataCollector">DataCollector</Checkbox>
+                    <Checkbox value="EventMerge">EventMerge</Checkbox>
+                    <Checkbox value="Identity">Identity</Checkbox>
+                    <Checkbox value="Context">LibraryInfo</Checkbox>
+                    <Checkbox value="DataCollector">MachineLearning</Checkbox>
+                    <Checkbox value="EventMerge">Personalization</Checkbox>
+                    <Checkbox value="Identity">Privacy</Checkbox>
+                  </CheckboxGroup>
+                  <div>
+                    <label htmlFor="minify">Minify?</label>
+                    <TextField
+                      type="checkbox"
+                      name="minify"
+                      id="minify"
+                    ></TextField>
+                  </div>
+                  <div>
+                    <button type="submit" disabled={isSubmitting}>
+                      ⚒ Build
+                    </button>
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          </section>
+          {serverResponse != null && (
+            <>
+              <p>
+                <button onClick={onDownloadClicked}>💾 Download</button>
+              </p>
+              <section>
+                <Step.StepHeader>Result</Step.StepHeader>
+                {ServerResponse}
+              </section>
+            </>
+          )}
+        </main>
+      </Flex>
     </div>
   );
 }

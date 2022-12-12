@@ -1,5 +1,5 @@
 import React from "react";
-import { defaultTheme, Provider } from "@adobe/react-spectrum";
+import { AppWrapper } from "./components/AppWrapper";
 
 import ReactDOM from "react-dom/client";
 import App from "./App";
@@ -8,11 +8,13 @@ import reportWebVitals from "./reportWebVitals";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
+
 root.render(
   <React.StrictMode>
-    <Provider theme={defaultTheme}>
+    <AppWrapper>
       <App />
-    </Provider>
+    </AppWrapper>
+    ,
   </React.StrictMode>
 );
 
