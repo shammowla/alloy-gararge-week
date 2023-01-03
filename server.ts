@@ -76,8 +76,10 @@ async function generateOutputs(
     preserveModules: true,
   };
   if (configuration.minify) {
-    // Disabled until https://github.com/rollup/plugins/pull/1367 is in main
-    // rollupOutputOptions.plugins = [...(rollupOutputOptions.plugins ?? []), terser()]
+    rollupOutputOptions.plugins = [
+      ...(rollupOutputOptions.plugins ?? []),
+      terser(),
+    ];
   }
   const start = performance.now();
   const { output } = await bundle.generate(rollupOutputOptions);
