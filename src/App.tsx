@@ -13,7 +13,8 @@ import JSZip from "jszip";
 import FileSaver from "file-saver";
 
 SyntaxHighlighter.registerLanguage("javascript", js);
-const JS_ENTRY_POINT_FILENAME = "index.js";
+const JS_ENTRY_POINT_FILENAME = "alloy.js";
+const encoder = new TextEncoder();
 
 async function downloadBundlerResults(
   results: BundlerSuccessResult
@@ -31,20 +32,20 @@ async function downloadBundlerResults(
 }
 
 function writeAlloyConfigScript(configuration: AlloyBuildConfig): BundlerChunk {
-  const code = `import { createInstance } from "./alloy/src/index.js"
+  const code = `import { createInstance } from "./index.js"
 
 const alloy = createInstance();
 alloy.configure({
   orgId: "${configuration.orgId}",
-  edgeConfigId: "${configuration.edgeConfigId}",
-  components: ${JSON.stringify(configuration.includedComponents, null, 4)}
+  edgeConfigId: "${configuration.edgeConfigId}"
 });
 export default alloy;
 `;
 
   return {
-    name: JS_ENTRY_POINT_FILENAME,
     code,
+    name: JS_ENTRY_POINT_FILENAME,
+    size: encoder.encode(code).byteLength,
   };
 }
 
@@ -96,7 +97,9 @@ function App() {
           <p>Succeeded building Alloy. Took {serverResponse.elapsedTime}ms.</p>
           {serverResponse.chunks.map((c) => (
             <>
-              <h3>{c.name}</h3>
+              <h3>
+                {c.name} ({c.size / 1000} kB)
+              </h3>
               <SyntaxHighlighter
                 language="javascript"
                 showLineNumbers={true}
